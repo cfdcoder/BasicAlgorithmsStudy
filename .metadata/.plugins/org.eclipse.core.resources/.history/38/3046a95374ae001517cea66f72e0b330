@@ -50,13 +50,11 @@ public class MergeSort {
 				A[low++] = firstHalf[i++];
 				continue;
 			}
-			
 			if (firstHalf[i] < secondHalf[j]) {
 				A[low++] = firstHalf[i++];
 			} else {
 				A[low++] = secondHalf[j++];
 			}
-
 		}
 	}
 
