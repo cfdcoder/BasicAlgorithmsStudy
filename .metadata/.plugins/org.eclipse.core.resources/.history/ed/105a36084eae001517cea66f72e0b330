@@ -1,0 +1,67 @@
+package study;
+
+public class QuickSort {
+    int[] Arr;
+    int countQS;
+    
+    //constructor
+    QuickSort(int[] A){
+    	this.Arr=A.clone();
+    	this.countQS=0;
+    }
+    
+    //get pivot index with smaller elements on the left and bigger elements on the right
+    private static int Partition(int[] A, int lo, int hi){
+        int pivot=A[hi];
+        int pIndex=lo;
+        for(int i=lo;i<hi;i++){
+        	if(A[i]<=pivot){
+        		swap(A[i],A[pIndex]);
+        		pIndex=pIndex+1;
+        	}
+        }
+        swap(A[pIndex], A[hi]);
+        return pIndex;
+    }
+    	
+    public static void Sort(int[] A, int lo, int hi){
+    	if(lo<hi){
+    		int p = Partition(A, lo, hi);
+    		Sort(A, lo, p-1);
+    		Sort(A, p+1, hi);
+    	}
+    }
+    
+    //exchange two numbers
+    private static void swap(int x, int y){
+    	int temp;
+    	temp=x;
+    	x=y;
+    	y=temp;
+    }
+	
+      
+    public static void OutputArray(int A[]) {
+		for (int i = 0; i < A.length; i++) {
+			System.out.print(A[i] + ", ");
+		}
+	}
+
+	public void OutputQuickCounts() {
+		System.out.println(" ");
+		System.out.println("num of merge executions: " + this.countQS);
+	}
+
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] Array = {8,3,7,2,1,4,6,5};
+		
+		QuickSort qs = new QuickSort(Array);
+		QuickSort.Sort(qs.Arr, 0, qs.Arr.length-1);
+		OutputArray(qs.Arr);
+		
+	}
+
+}

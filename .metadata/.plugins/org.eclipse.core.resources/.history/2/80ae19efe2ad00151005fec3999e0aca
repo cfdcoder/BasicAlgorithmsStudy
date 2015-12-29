@@ -1,0 +1,27 @@
+package study;
+
+public class QuickSort {
+    int[] Arr;
+    
+    //get pivot from subarray
+    public void static partition(int[] A, int lo, int hi){
+    	int pivot=A[lo];
+    	int[] left;
+    	int[] right;
+    	
+    	int i=0;
+    	int j=0;
+        while(lo<=hi){
+        	if(A[lo++]<pivot)
+        		left[i++]=A[lo++];
+        	if(A[lo++]>pivot)
+        		right[j++]=A[lo++];
+        }
+    }
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

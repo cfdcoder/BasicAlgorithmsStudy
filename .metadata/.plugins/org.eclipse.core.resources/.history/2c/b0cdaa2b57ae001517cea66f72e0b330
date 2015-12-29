@@ -1,0 +1,89 @@
+package study;
+
+public class QuickSort {
+    int[] Arr;
+    int countQS;
+    
+    //constructor
+    QuickSort(int[] A){
+    	this.Arr=A.clone();
+    	this.countQS=0;
+    }
+    
+    //get pivot index with smaller elements on the left and bigger elements on the right
+    private int Partition(int[] A, int lo, int hi){
+        int pivot=A[hi];
+        int pIndex=lo;//set partition index as start initially
+        for(int i=lo;i<hi;i++){
+        	if(A[i]<=pivot){
+        		//Swap(A[i],A[pIndex]);
+        		int temp=A[i];
+        		A[i]=A[pIndex];
+        		A[pIndex]=temp;
+        		pIndex++;
+        	}
+        }
+        //Swap(A[pIndex], A[hi]);
+        int temp=A[pIndex];
+		A[pIndex]=A[hi];
+		A[hi]=temp;
+        return pIndex;
+    }
+    	
+    public void Sort(int[] A, int lo, int hi){
+    	if(lo<hi){	
+    		int p = Partition(A, lo, hi);
+    		System.out.println("pivot element=:"+A[p]+"##");
+    		GetArray(A, lo, p-1);
+    		GetArray(A, p+1, hi);
+    		
+    		Sort(A, lo, p-1);
+    		Sort(A, p+1, hi);
+    		
+    	}
+    	else
+    		return;
+    }
+    
+    //exchange two numbers
+    public static void Swap(int x, int y){
+    	int temp=x;
+    	x=y;
+    	y=temp;
+    }
+	
+      
+    public void OutputArray(int A[]) {
+		for (int i = 0; i < A.length; i++) {
+			System.out.print(A[i] + ", ");
+		}
+		System.out.println(" ");
+	}
+
+    public void GetArray(int A[], int lo, int hi){
+    	for(int i=lo;i<=hi;i++){
+    		System.out.print("*"+A[i]);
+    	}
+    	System.out.println(" ");
+    }
+/*	public static void OutputQuickCounts() {
+		System.out.println(" ");
+		System.out.print("num of merge executions: " + this.countQS);
+	}*/
+
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] A = {7,2,1,6,8,5,3,4};
+		
+		QuickSort QS = new QuickSort(A);
+		System.out.print("initial arr: ");
+		QS.OutputArray(QS.Arr);
+		QS.Sort(QS.Arr, 0, QS.Arr.length-1);
+		System.out.print("final arr: ");
+		QS.OutputArray(QS.Arr);
+
+	}
+
+}

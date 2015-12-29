@@ -1,0 +1,79 @@
+package study;
+
+
+public class MergeSort {
+
+	int[] Arr;
+	int countMerge;
+	//constructor
+	MergeSort(int[] A){
+		this.Arr=A;
+		this.countMerge=0;
+	}
+	
+	public void divide(int[] A, int low, int high){
+		if(low==high) return;
+		else{
+			this.countMerge++;
+			int mid=(low+high)/2;
+			divide(A, low, mid);
+			divide(A, mid+1, high);
+			mergeAndSort(A, low, mid, high);
+		}
+	}
+	
+	private static void mergeAndSort(int A[], int low, int mid, int high){
+		int m=mid-low+1;//num of elements in the first half of Array A
+		int n=high-(mid+1)+1; //num of elements in the second half of Array A
+		int[] firstHalf=new int [m];
+		int[] secondHalf=new int [n];
+		
+		//extract the first half of already sorted sub array
+		for (int i=0; i<m;i++){
+			firstHalf[i]=A[low+i];
+		}
+		//extract the second half of already sorted sub array
+		for (int j=0; j<n;j++){
+			secondHalf[j]=A[mid+1+j];
+		}		
+		//sort and merge the two halves together
+		int i=0; int j=0;
+		while(i<m || j<n){
+			if(i>=m){
+				A[low++]=secondHalf[j++];
+				continue;
+			}
+			if(j>=n){
+				A[low++]=firstHalf[i++];
+				continue;
+			}
+			if(firstHalf[i]<secondHalf[j]){
+				A[low++]=firstHalf[i++];
+			}else{
+				A[low++]=secondHalf[j++];
+			}
+		}
+	}
+	
+	public void outputArray(int A[]){
+		for (int i=0;i<A.length;i++){
+			System.out.print(A[i]+", ");
+		}
+	}
+	
+	public void outputMergeCounts(){
+		System.out.println(" ");
+		System.out.println("num of merge executions: "+this.countMerge);
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] Array={0,1,3,5,7,9,15,13,11,2,4,6,8,10,14,12};
+        MergeSort sort=new MergeSort(Array);
+        sort.divide(sort.Arr, 0, sort.Arr.length-1);
+        sort.outputArray(sort.Arr);
+        sort.outputMergeCounts();
+	}
+
+}
+
