@@ -7,11 +7,12 @@ package study;
  * */
 public class HeapSort {
     int[] Arr;
-    int heapSize;
+    
     HeapSort(int[] A){
     	this.Arr=A.clone();
     }
     
+    //heap index start from 1, so if the parentIndex is i, the leftIndex is 2*i, and rightIndex is 2*i+1, 
     private static int left(int i){
         return 2*i;
     }
@@ -45,7 +46,7 @@ public class HeapSort {
     public static void buildMaxHeap(int[] data){
         int heapSize = data.length;
          
-        for(int i = heapSize/2; i >= 0; i--){
+        for(int i = heapSize/2; i >=0; i--){
             maxHeapify(data, i, heapSize);
         }
     }
@@ -54,10 +55,12 @@ public class HeapSort {
         int heapSize = data.length;
          
         buildMaxHeap(data);
+        System.out.println("Max heap built is:");
+        outputArray(data);//check if the heap is correct
         for(int i = heapSize - 1; i > 0; i--){
-            swap(data,0,i);
+            swap(data,0,i);//equivalent to swap(heapData,1,i);
             heapSize = heapSize - 1;
-            maxHeapify(data, 0, heapSize);
+            maxHeapify(data, 0, heapSize);//equivalent to maxHeapify(heapData, 1, heapSize);
         }
     }
      
@@ -67,15 +70,16 @@ public class HeapSort {
         data[j] = temp;
     }
 	
-    public void outputArray(int A[]) {
+    public static void outputArray(int A[]) {
 		for (int i = 0; i < A.length; i++) {
 			System.out.print(A[i] + ", ");
 		}
+		System.out.println(" ");
 	}
     
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int[] Array = { 7, 1, 9, 5, 0, 3};
+		int[] Array = { 7,3,7,9,5,2,5};
 		HeapSort HS=new HeapSort(Array);
 		HS.heapSort(HS.Arr);
         HS.outputArray(HS.Arr);
