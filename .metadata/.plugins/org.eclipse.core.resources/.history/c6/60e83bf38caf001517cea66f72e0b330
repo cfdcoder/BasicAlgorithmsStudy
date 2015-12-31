@@ -1,0 +1,27 @@
+package study;
+
+public class HeapSort {
+    int[] Arr;
+    
+	private void BuildHeap(int[] A){
+		
+	}
+	
+	private void MinHepify(){
+		
+	}
+	
+	private void MaxHepify(){
+		
+	}
+	
+	private void DeleteRoot(){
+		
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

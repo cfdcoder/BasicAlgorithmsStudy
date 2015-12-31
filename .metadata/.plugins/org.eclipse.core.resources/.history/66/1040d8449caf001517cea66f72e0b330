@@ -1,10 +1,5 @@
 package study;
-/**
- * this is the max heap sort implementation: 
- * step1: build max heap
- * step2: maintain the heapify
- * step3: do the heap sort
- * */
+
 public class HeapSort {
     int[] Arr;
     int heapSize;
@@ -67,18 +62,14 @@ public class HeapSort {
         data[j] = temp;
     }
 	
-    public void outputArray(int A[]) {
-		for (int i = 0; i < A.length; i++) {
-			System.out.print(A[i] + ", ");
-		}
-	}
-    
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int[] Array = { 7, 1, 9, 5, 0, 3};
 		HeapSort HS=new HeapSort(Array);
-		HS.heapSort(HS.Arr);
-        HS.outputArray(HS.Arr);
+		heapSort(Array);
+        for(int i = 0; i < Array.length; i++) {
+            System.out.print(Array[i] + " ");
+        }
 		
 	}
 

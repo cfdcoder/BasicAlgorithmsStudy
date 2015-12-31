@@ -1,0 +1,84 @@
+package study;
+
+public class HeapSort {
+    int[] Arr;
+    int heapSize;
+    HeapSort(int[] A){
+    	this.Arr=A.clone();
+    	this.heapSize=A.length;
+    }
+    
+    public void HeapSort(int[] A){
+    	BuildMaxHeap(A);
+    	for(int i=A.length-1;i>=2;i--){
+    		Exchange(A, 1, i);
+    		this.heapSize--;
+    		MaxHeapify(A, 1);
+    	}
+    	Exchange(A,2,1);
+    }
+    
+	private void BuildMaxHeap(int[] A){
+		
+		for (int i=this.heapSize/2;i>0;i--){
+			MaxHeapify(A, i);
+		}
+	}
+
+	
+	private void MaxHeapify(int[] A, int index){
+		int largest;
+		int left=GetLeftChildIndex(index);
+		int right=GetRightChildIndex(index);
+		if(left<this.heapSize && A[left]>A[index])
+			largest=left;
+		else
+			largest=index;
+		
+		if(right<this.heapSize && A[right]>A[largest])
+			largest=right;
+		
+		if(largest!=index){
+			Exchange(A, index, largest);
+			MaxHeapify(A, largest);
+		}
+	}
+	
+	private void Exchange(int[] A, int x, int y){
+		int temp=A[x];
+		A[x]=A[y];
+		A[y]=A[x];
+	}
+		
+	private int GetParentIndex(int index){
+		return (index/2);
+	}
+	
+	private int GetLeftChildIndex(int index){
+		return (index*2);
+	}
+	
+	private int GetRightChildIndex(int index){
+		return (index*2+1);
+	}
+	
+	public void OutputArray(int A[]) {
+		for (int i = 0; i < A.length; i++) {
+			System.out.print(A[i] + ", ");
+		}
+		System.out.println(" ");
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] Array = { 7, 1, 9, 5, 0, 3};
+		HeapSort HS=new HeapSort(Array);
+		System.out.println("Unsorted Array:");
+		HS.OutputArray(HS.Arr);
+		HS.BuildMaxHeap(HS.Arr);
+		System.out.println("Sorted Array:");
+		HS.OutputArray(HS.Arr);
+		
+	}
+
+}
