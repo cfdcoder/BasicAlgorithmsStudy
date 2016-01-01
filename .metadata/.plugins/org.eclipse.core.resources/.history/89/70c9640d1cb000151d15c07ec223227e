@@ -1,0 +1,61 @@
+package study;
+/**
+ * this is the simple implementation of binary search tree: 
+ * in-order traverse, post-order traverse, pre-order traverse
+ * add node
+ * delete node
+ * */
+public class BinarySearchTree {
+    Node root;
+    
+    //add a node to the binary search tree
+    public void addNewNode(int key, String data){
+    	Node newNode=new Node(key, data);
+    	if(root==null){
+    		root=newNode;
+    	}else{
+    		Node focusNode=root;
+    		Node parent;
+    		while(true){
+    			parent=focusNode;//set the parent node to the root as start point
+    			if(key<focusNode.key){
+    				focusNode=focusNode.leftChild;
+    				if(focusNode==null){//no left child there
+    					parent.leftChild=newNode;// add newnode tobe the leftchild of the parent
+    					return;
+    				}
+    			}else{
+    				focusNode=focusNode.rightChild;
+    				if(focusNode==null){//no right child there
+    					parent.rightChild=newNode;// add newnode tobe the rightchild of the parent
+    					return;
+    				}
+    			}
+    		}
+    	}
+    }
+    
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+//define the nodes in the binary search tree
+class Node{
+	int key;
+	String data;
+	
+	Node leftChild;
+	Node rightChild;
+	
+	Node(int key, String name){
+		this.key=key;
+		this.data=data;
+	}
+	
+	public String toString(){
+		return this.data+" has a key"+ this.key;
+	}
+}

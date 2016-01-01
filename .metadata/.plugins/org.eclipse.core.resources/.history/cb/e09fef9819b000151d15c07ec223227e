@@ -1,0 +1,32 @@
+package study;
+/**
+ * this is the simple implementation of binary search tree: 
+ * in-order traverse, post-order traverse, pre-order traverse
+ * add node
+ * delete node
+ * */
+public class BinarySearchTree {
+    
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+class Node{
+	int key;
+	String name;
+	
+	Node leftChild;
+	Node rightChild;
+	
+	Node(int key, String name){
+		this.key=key;
+		this.name=name;
+	}
+	
+	public void toString(){
+		System.out.println(this.name+"has a key"+this.key);
+	}
+}
