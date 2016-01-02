@@ -1,0 +1,245 @@
+package study;
+/**
+ * this is the simple implementation of binary search tree: 
+ * in-order traverse, post-order traverse, pre-order traverse
+ * add node
+ * delete node
+ * */
+public class BinarySearchTree {
+     Node root;
+    
+    //create a new node and initialize it
+    public void addNewNode(int key, String data){
+    	Node newNode=new Node(key, data);
+    	if(root==null){//if empty tree, set the new node as the root node
+    		root=newNode;
+    	}else{
+    		//set root node as the start point
+    		Node focusNode=root;
+    		//set the parent node for the new node
+    		Node parent;
+    		while(true){
+    			parent=focusNode;//set the parent node to the root node as start point
+    			//check if the new node should go to the left
+    			if(key<focusNode.key){
+    				//switch focus to the left child
+    				focusNode=focusNode.leftChild;
+    				if(focusNode==null){//no left child there
+    					parent.leftChild=newNode;// add newnode tobe the leftchild of the parent
+    					return;//all done
+    				}
+    			}else{//check if the new node should go to the right
+    				focusNode=focusNode.rightChild;
+    				if(focusNode==null){//no right child there
+    					parent.rightChild=newNode;// add newnode tobe the rightchild of the parent
+    					return;
+    				}
+    			}
+    		}
+    	}
+    }
+    
+    //inorder traverse order: leftchild, parent, rightchild
+    public void inOrderTraverse(Node focusNode){
+    	if(focusNode!=null){
+    		inOrderTraverse(focusNode.leftChild);
+    		System.out.println(focusNode);
+    		inOrderTraverse(focusNode.rightChild);
+    	}
+    }
+    
+    //preorder traverse order: parent, leftchild, rightchild
+    public void preOrderTraverse(Node focusNode){
+    	if(focusNode!=null){
+    		System.out.println(focusNode);
+    		preOrderTraverse(focusNode.leftChild);
+    		preOrderTraverse(focusNode.rightChild);
+    	}
+    }
+    
+    //postorder traverse order:  leftchild, rightchild, parent,
+    public void postOrderTraverse(Node focusNode){
+    	if(focusNode!=null){
+    		
+    		postOrderTraverse(focusNode.leftChild);
+    		postOrderTraverse(focusNode.rightChild);
+    		System.out.println(focusNode);
+    	}
+    }
+    
+    //find a node
+    public Node findNode(int key){
+    	//start with the root of the tree
+    	Node focusNode=root;
+    	while(focusNode.key!=key){
+    		if(key<focusNode.key){
+    			//we needto search on the left child
+    			focusNode=focusNode.leftChild;
+    		}else{
+    			//we needto search on the right child
+    			focusNode=focusNode.rightChild;
+    		}
+    		//if the node was not found
+    		if(focusNode==null) return null;
+    	}
+    	return focusNode;
+    }
+    
+    
+    //find the min in the tree
+    public Node getTreeMin(){
+    	Node focusNode=root;
+    	while(focusNode.leftChild!=null){
+    		focusNode=focusNode.leftChild;
+    	}
+    	return focusNode;
+    }
+    
+    //find the max in the tree
+    public Node getTreeMax(){
+    	Node focusNode=root;
+    	while(focusNode.rightChild!=null){
+    		focusNode=focusNode.rightChild;
+    	}
+    	return focusNode;
+    }
+    
+    
+    public boolean delete(int key) {
+    	Node current = root;
+    	Node parent = root;
+    	boolean isLeftChild = true;
+
+    	while (current.key != key) {
+    		parent = current;
+    		if (key < current.key) {
+    			isLeftChild = true;
+    			current = current.leftChild;
+    		} else {
+    			isLeftChild = false;
+    			current = current.rightChild;
+    		}
+    		if (current == null)
+    			return false;
+    	}
+    	//current node is leaf only
+    	if (current.leftChild == null && current.rightChild == null) {
+    		if (current == root)
+    			root = null;
+    		else if (isLeftChild)
+    			parent.leftChild = null;
+    		else
+    			parent.rightChild = null;
+    	} 
+    	// current node has left child only
+    	else if (current.rightChild == null) {
+    		if (current == root)
+    			root = current.leftChild;
+    		else if (isLeftChild)
+    			parent.leftChild = current.leftChild;
+    		else
+    			parent.rightChild = current.leftChild;
+    	}
+    	// current node has right child only
+    	else if (current.leftChild == null) {
+    		if (current == root)
+    			root = current.rightChild;
+    		else if (isLeftChild)
+    			parent.leftChild = current.rightChild;
+    		else
+    			parent.rightChild = current.rightChild;
+    	}
+    	//  current node has child on both left side and right side
+    	else {
+    		Node successor = getSuccessor(current);
+    		if (current == root) {
+    			root = successor;
+    		} else if (isLeftChild) {
+    			parent.leftChild = successor;
+    		} else
+    			parent.rightChild = successor;
+
+    		successor.leftChild = current.leftChild;
+
+    	}
+
+    	return true;
+    }
+
+   
+    
+    private Node getSuccessor(Node delNode) {
+    	Node successorParent = delNode;
+    	Node successor = delNode;
+    	Node current = delNode.rightChild;
+
+    	while (current != null) {
+    		successorParent = successor;
+    		successor = current;
+    		current = current.leftChild;
+    	}
+    	
+    	if (successor != delNode.rightChild) {
+    		successorParent.leftChild = successor.rightChild;
+    		successor.rightChild = delNode.rightChild;
+    	}
+    	return successor;
+    }
+
+ 
+    
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+        BinarySearchTree tree=new BinarySearchTree();
+        
+        //add new node
+        tree.addNewNode(1, "Boss");
+        tree.addNewNode(2, "President");
+        tree.addNewNode(3, "Head");
+        tree.addNewNode(4, "Manager");
+        tree.addNewNode(5, "Secretary");
+        tree.addNewNode(6, "Salesman");
+        
+        //check traverse implementation
+        //tree.inOrderTraverse(tree.root);
+        //tree.preOrderTraverse(tree.root);
+        //System.out.println("tree data before deleted key:");
+        tree.inOrderTraverse(tree.root);
+        
+        
+        //System.out.println("search data with key 3");
+        System.out.println(" ");
+        System.out.println(tree.findNode(2));
+        
+        System.out.println(" ");
+        System.out.println("remove data with key 2");
+        
+       
+       tree.delete(3);
+        
+        
+        System.out.println(" ");
+        System.out.println("tree data after deleted key:");
+        tree.inOrderTraverse(tree.root);
+        
+	}
+
+}
+
+//define the nodes in the binary search tree
+class Node{
+	int key;
+	String data;
+	
+	Node leftChild;
+	Node rightChild;
+	
+	Node(int key, String data){
+		this.key=key;
+		this.data=data;
+	}
+	
+	public String toString(){
+		return this.data+" has a key "+ this.key;
+	}
+}
