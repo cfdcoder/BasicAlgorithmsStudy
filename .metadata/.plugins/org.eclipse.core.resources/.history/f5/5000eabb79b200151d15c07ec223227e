@@ -1,0 +1,65 @@
+package study;
+
+public class RBTree<T extends Comparable<T>> {
+    private RBNode<T> Root;
+
+    
+    public RBTree(){
+    	Root=null;
+    }
+    
+    private RBNode<T> parent(RBNode<T> node){
+    	if (node!=null){
+    		return node.parent;
+    	}else{
+    		return null;
+    	}
+    }
+    
+    private NodeColor color(RBNode<T> node){
+    	if(node!=null)
+    		return node.color;
+    	else
+    		return null;
+    }
+    
+    private boolean isRed(RBNode<T> node){
+    	if(node!=null && node.color==RED)
+    }
+    
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+class RBNode<T extends Comparable <T>>{
+	public NodeColor color;
+	T key;
+	RBNode<T> left;
+	RBNode<T> right;
+	RBNode<T> parent;
+	
+	public RBNode(T key, NodeColor color, RBNode<T>parent, RBNode<T>left, RBNode<T>right){
+		this.key=key;
+		this.color=color;
+		this.parent=parent;
+		this.left=left;
+		this.right=right;
+	}
+	
+	public T getKey(){
+		return key;
+	}
+	
+	public String toString(){
+		return " "+key+this.color+" ";
+	}
+	
+}
+
+
+enum NodeColor{
+	RED, BLACK;
+}

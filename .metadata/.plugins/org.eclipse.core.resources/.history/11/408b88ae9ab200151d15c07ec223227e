@@ -1,0 +1,538 @@
+package study;
+
+public class RBTree<T extends Comparable<T>> {
+    private RBNode<T> Root;
+
+    
+    public RBTree(){
+    	Root=null;
+    }
+    
+    private RBNode<T> getParent(RBNode<T> node){
+    	if (node!=null){
+    		return node.parent;
+    	}else{
+    		return null;
+    	}
+    }
+    
+    private void setColor(RBNode<T>node, NodeColor color){
+        	if(node!=null)
+        		node.color=color;
+    }
+    
+    private NodeColor getColor(RBNode<T> node){
+    	if(node!=null)
+    		return node.color;
+    	else
+    		return null;
+    }
+    
+    private boolean isRed(RBNode<T> node){
+    	if(node!=null && node.color==NodeColor.red){
+    		return true;
+    	}else
+    		return false;
+    }
+    
+    private boolean isBlack(RBNode<T> node){
+    	if(node!=null && node.color==NodeColor.black){
+    		return true;
+    	}else
+    		return false;
+    }
+    
+    private void setRed(RBNode<T>node){
+    	if(node!=null)
+    		node.color=NodeColor.red;
+    }
+    
+    private void setBlack(RBNode<T>node){
+    	if(node!=null)
+    		node.color=NodeColor.black;
+    }
+    
+    private void setParent(RBNode<T>node, RBNode<T>parent){
+    	if(node!=null)
+    		node.parent=parent;
+    }
+    
+    //pre order traverse
+    private void preOrder(RBNode<T> tree){
+    	if(tree!=null){
+    		System.out.println(tree.key+" ");
+    		preOrder(tree.left);
+    		preOrder(tree.right);
+    	}
+    }
+    
+    public void preOrder(){
+    	preOrder(Root);
+    }
+    
+    //in order traverse
+    private void inOrder(RBNode<T> tree){
+    	if(tree!=null){
+    		inOrder(tree.left);
+    		System.out.println(tree.key+" ");
+    		inOrder(tree.right);
+    	}
+    }
+    
+    public void inOrder(){
+    	inOrder(Root);
+    }
+    
+    //post order traverse
+    private void postOrder(RBNode<T> tree){
+    	if(tree!=null){
+    		postOrder(tree.left);
+    		postOrder(tree.right);
+    		System.out.println(tree.key+" ");
+    	}
+    }
+    
+    public void postOrder(){
+    	postOrder(Root);
+    }
+    
+    //recursive search 
+    private RBNode recursiveSearch(RBNode<T> x, T key){
+    	if(x==null) return null;
+    	int cmp=key.compareTo(x.key);
+    	if(cmp<0)
+    		return recursiveSearch(x.left,key);
+    	else if(cmp>0)
+    		return recursiveSearch(x.right, key);
+    	else
+    		return x;
+    }
+    
+    public RBNode<T> recursiveSearch(T key){
+    	return recursiveSearch(Root, key);
+    }
+    
+    //iterative search 
+    private RBNode<T> iterativeSearch(RBNode<T> x, T key){
+    	while(x!=null){
+    		int cmp=key.compareTo(x.key);
+    		if(cmp<0) x=x.left;
+    		else if(cmp>0) x=x.right;
+    		else return x;
+    			
+    	}
+    	return x;
+    }
+    
+    public RBNode<T> iterativeSearch(T key){
+    	return iterativeSearch(Root, key);
+    }
+    
+    //find the minimum of tree
+    private RBNode<T> min(RBNode<T> tree){
+    	if(tree==null) return null;
+    	while(tree.left!=null)
+    		tree=tree.left;
+    	
+    	return tree;
+    }
+    
+    public T minimum(){
+    	RBNode<T> p=min(Root);
+    	if(p!=null)
+    		return p.key;
+    	
+    	return null;
+    }
+    
+    //find the maximum of tree
+    private RBNode<T> max(RBNode<T> tree){
+    	if(tree==null) return null;
+    	while(tree.right!=null)
+    		tree=tree.right;
+    	
+    	return tree;
+    }
+    
+    public T maximum(){
+    	RBNode<T> p=max(Root);
+    	if(p!=null)
+    		return p.key;
+    	
+    	return null;
+    }
+    
+    //find the minimum(leftmost) child bigger than current node: successor
+    /**
+     *        O
+     *     /     \
+     *    O        O (<--x)
+     *   /  \     /   \
+     *  O    O    O     O
+     *  /\   /\   / \   / \
+     * O  O  O O  O  O  O  O
+     *              (^)(^)
+     *              (|)(|)
+     *   (predecessor)(successor)   
+     * */
+    public RBNode<T> successor(RBNode<T> x){
+    	//case 1
+    	//if node x has right child, then the successor is the leftmost child bigger than x which the subtree rooted at the node of x
+    	//the successor is also the minimum node at the subtree rooted at x.right
+    	if(x.right!=null)
+    		return min(x.right);
+    	//case 2
+    	//if node x has no right child
+    	//case 2.1: if x is a left leaf, its successor is the immediate parent node
+    	RBNode<T> y1=x.parent;
+    	if(x==y1.left && x.right==null && x.left==null)
+    		return y1;
+    	
+    	//case 2.2: if x is a right leaf, its successor is a parent node 
+    	//(upward in the tree)(also an lowest ancestor) whose leftchild is also an ancestor
+    	// the successor is immediately bigger than x
+    	RBNode<T> y2=x.parent;
+    	while((x==y2.right) && (y2!=null)){
+    		x=y2;
+    		y2=y2.parent;
+    	}
+    	return y2;
+    }
+    
+    //find the maximum node smaller than current node: predecessor
+    public RBNode<T> predecessor(RBNode<T> x){
+    	//case 1
+    	//if node x has left child, then the predecessor is the rightmost child smaller than x which the subtree rooted at the node of x
+    	//the predecessor is also the maximum node at the subtree rooted at x.left
+    	if(x.left!=null)
+    		return max(x.left);
+    	//case 2
+    	//if node x has no left child
+    	//case 2.1: if x is a right leaf, its predecessor is the immediate parent node
+    	RBNode<T> y1=x.parent;
+    	if(x==y1.right && x.right==null && x.left==null)
+    		return y1;
+    	
+    	//case 2.2: if x is a left leaf, its predecessor is a parent node 
+    	//(upward in the tree)(also an lowest ancestor) 
+    	// the predecessor is immediately smaller than x
+    	RBNode<T> y2=x.parent;
+    	while((x==y2.left) && (y2!=null)){
+    		x=y2;
+    		y2=y2.parent;
+    	}
+    	return y2;
+    }
+    
+    //left rotate
+    //            px                                      px
+    //      *     /                                       /
+    //      *    x                                       y                
+    //      *   /  \      --(left rotate)-->.           /  \                #
+    //      *  lx   y                                  x    ry     
+    //      *     /   \                                / \
+    //      *    ly   ry                              lx  ly  
+    //      *
+    //      *
+    //      */
+    private void leftRotate(RBNode<T>x){
+    	//step1: set y as x.right
+    	RBNode<T> y=x.right;
+    	
+    	//step2: set y.left-->x.right
+    	x.right=y.left;
+    	
+    	//step3: if y.left!=null, set x as the parent of y.left
+    	if(y.left!=null)
+    		y.left.parent=x;
+    	
+    	//step4: set x.parent -->y.parent
+    	y.parent=x.parent;
+    	
+    	//step5: set y's position with original x's parent
+    	if(x.parent==null){
+    		this.Root=y;
+    	}else{
+    		if(x.parent.left==x)
+    			x.parent.left=y;
+    		else
+    			x.parent.right=y;
+    	}
+    	
+    	//step6: set x as the y.left
+    	y.left=x;
+    	
+    	//step7: set y as x's parent
+    	x.parent=y;
+    	
+    }
+    
+    
+    //right rotate
+    //            px                                       px
+    //      *     /                                        /
+    //      *    x                                         y                
+    //      *   /  \      <--(right rotate)--            /   \                #
+    //      *  lx   y                                    x    ry     
+    //      *     /   \                                 /  \
+    //      *    ly   ry                               lx  ly  
+    //      *
+    //      *
+    //      */
+    private void rightRotate(RBNode<T>y){
+    	//step1: set up y
+    	RBNode<T> x=y.left;
+    	
+    	//step2: set x.right to be y.left
+    	y.left=x.right;
+    	
+    	//step3: take care of the special node x.right
+    	if(x.right!=null)
+    		x.right.parent=y;
+    	
+    	//step4: set y.parent to be the x.parent
+    	x.parent=y.parent;
+    	
+    	//step5: set y's position with original x's parent
+    	if(y.parent==null){
+    		this.Root=x;
+    	}
+    	else{
+    		if(y==y.parent.right)
+    			y.parent.right=x;
+    		else
+    			y.parent.left=x;
+    	}
+    	
+    	//step6: reset x and y relation
+    	x.right=y;
+    	y.parent=x;
+    	
+    }
+    
+    //fixup red-black tree after insert a new node
+    private void insertFixup(RBNode<T> node){
+    	RBNode<T> father;
+    	RBNode<T> grandfather;
+    	father=getParent(node);
+    	while((father!=null) && isRed(father)){
+    		grandfather=getParent(father);
+    		//case1: if father is the grandfather.left
+    		if(father==grandfather.left){
+    			//1.1 the uncle is red
+    			RBNode<T> uncle=grandfather.right;
+    			if((uncle!=null) && (isRed(uncle))){
+    				setBlack(uncle);
+    				setBlack(father);
+    				setRed(grandfather);
+    				node=grandfather;
+    				continue;
+    			}
+    			
+    			//1.2 the uncle is black, current node is father.right
+    			if(isBlack(uncle) && (father.right==node)){
+    				RBNode<T> tmp;
+    				leftRotate(father);
+    				tmp=father;
+    				father=node;
+    				node=tmp;
+    			}
+    			
+    			//1.3 uncle is black, and current node is father.left
+    			setBlack(father);
+    			setRed(grandfather);
+    			rightRotate(grandfather);
+    		}
+    		//case 2: if father is the grandfather.right
+    		else{
+    			//case2.1:uncle is red
+    			RBNode<T> uncle=grandfather.left;
+    			if((uncle!=null)&&isRed(uncle)){
+    				setBlack(uncle);
+    				setBlack(father);
+    				setRed(grandfather);
+    				node=grandfather;
+    				continue;
+    			}
+    			//case2.2:uncle is black, and current node is the left child of father
+    			if((isBlack(uncle)) && (father.left==node)){
+    				RBNode<T> tmp;
+    				rightRotate(father);
+    				tmp=father;
+    				father=node;
+    				node=tmp;
+    			}
+    			//case2.3:uncle is black, and current node is the right child of father
+    			setBlack(father);
+    			setRed(grandfather);
+    			leftRotate(grandfather);
+    		}
+    	}
+    	setBlack(this.Root);
+    }
+    
+    //insert node to the tree
+    private void insert(RBNode<T>node){
+    	int cmp;
+    	RBNode<T>y=null;
+    	RBNode<T>x=this.Root;
+    	
+    	//insert a node
+    	while(x!=null){
+    		y=x;
+    		cmp=node.key.compareTo(x.key);
+    		if(cmp<0)
+    			x=x.left;
+    		else
+    			x=x.right;
+    	}
+    	node.parent=y;
+    	if(y!=null){
+    		cmp=node.key.compareTo(y.key);
+    		if(cmp<0)
+    			y.left=node;
+    		else
+    			y.right=node;
+    	}
+    	else{
+    		this.Root=node;
+    	}
+    	
+    	//set the node color
+    	setRed(node);
+    	
+    	//fixup the red-black tree
+    	insertFixup(node);
+    }
+    
+    public void insert(T key){
+    	RBNode<T> node=new RBNode<T>(key, NodeColor.black, null, null, null);
+    	if(node!=null)
+    		insert(node);
+    }
+    
+    //fixup red-black tree after delete a new node
+    private void deleteFixup(RBNode<T>node, RBNode<T> father){
+    	RBNode<T> x;
+    	while((node==null || isBlack(node))&&(node!=this.Root)){
+    		//1.0 if current node is the father.left
+    		if(node==father.left){
+    			x=father.right;
+    			//1.1: x's bother is red
+    			if(isRed(x)){
+    				setBlack(x);
+    				setRed(father);
+    				leftRotate(father);
+    				x=father.right;
+    			}
+    			//1.2 x's brother is black, both child of x's brother is also black
+    			if((x.left==null || isBlack(x.left))&&(x.right==null || isBlack(x.right))){
+    				setRed(x);
+    				node=father;
+    				father=getParent(node);
+    			}	
+    			else{
+    				//1.3 x's brother is black, leftchild of x's brother is red, rightchild of x's brother is black
+    				if(x.right==null || isBlack(x.right)){
+    					setBlack(x.left);
+    					setRed(x);
+    					rightRotate(x);
+    					x=father.right;
+    				}
+    				//1.4 x's brother is black, rightchild of x's brother is red, leftchild of x's brother is whatever
+    				setColor(x, getColor(father));
+    				setBlack(father);
+    				setBlack(x.right);
+    				leftRotate(father);
+    				node=this.Root;
+    				break;
+    			}
+    		}
+    		
+    		//2.0 if current node is the father.right
+    		else{
+    			x=father.left;
+    			//2.1
+    			if(isRed(x)){
+    				setBlack(x);
+    				setRed(father);
+    				rightRotate(father);
+    				x=father.left;
+    			}
+       			//2.2
+    			if((x.left==null ||isBlack(x.left))&&(x.right==null || isBlack(x.right))){
+    				setRed(x);
+    				node=father;
+    				father=getParent(node);
+    			}
+    			else{
+    				//2.3
+    				if(x.left==null || isBlack(x.left)){
+    					setBlack(x.left);
+    					setRed(x);
+    					leftRotate(x);
+    					x=father.left;
+    				}
+    				//2.4
+    				setColor(x,getColor(father));
+    				setBlack(father);
+    				setBlack(x.left);
+    				rightRotate(father);
+    				node=this.Root;
+    				break;
+    			}	
+    		}
+    	}
+    	
+    	if(node!=null)
+    		setBlack(node);
+    }
+    
+    //delete a node
+    private void delete(RBNode<T>node){
+    	
+    }
+    
+    //delete a node
+    public void delete(T key){
+    	RBNode<T> node;
+    	if((node=recursiveSearch(Root, key))!=null)
+    		delete(node);
+    }
+    
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+class RBNode<T extends Comparable <T>>{
+	public NodeColor color;
+	T key;
+	RBNode<T> left;
+	RBNode<T> right;
+	RBNode<T> parent;
+	
+	public RBNode(T key, NodeColor color, RBNode<T>parent, RBNode<T>left, RBNode<T>right){
+		this.key=key;
+		this.color=color;
+		this.parent=parent;
+		this.left=left;
+		this.right=right;
+	}
+	
+	public T getKey(){
+		return key;
+	}
+	
+	public String toString(){
+		return " "+key+this.color+" ";
+	}
+	
+}
+
+
+enum NodeColor{
+	red, black;
+}

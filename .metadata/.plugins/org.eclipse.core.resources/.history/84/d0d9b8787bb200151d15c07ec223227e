@@ -1,0 +1,129 @@
+package study;
+
+public class RBTree<T extends Comparable<T>> {
+    private RBNode<T> Root;
+
+    
+    public RBTree(){
+    	Root=null;
+    }
+    
+    private RBNode<T> parent(RBNode<T> node){
+    	if (node!=null){
+    		return node.parent;
+    	}else{
+    		return null;
+    	}
+    }
+    
+    private NodeColor getColor(RBNode<T> node){
+    	if(node!=null)
+    		return node.color;
+    	else
+    		return null;
+    }
+    
+    private boolean isRed(RBNode<T> node){
+    	if(node!=null && node.color==NodeColor.red){
+    		return true;
+    	}else
+    		return false;
+    }
+    
+    private boolean isBlack(RBNode<T> node){
+    	if(node!=null && node.color==NodeColor.black){
+    		return true;
+    	}else
+    		return false;
+    }
+    
+    private void setRed(RBNode<T>node){
+    	if(node!=null)
+    		node.color=NodeColor.red;
+    }
+    
+    private void setBlack(RBNode<T>node){
+    	if(node!=null)
+    		node.color=NodeColor.black;
+    }
+    
+    private void setParent(RBNode<T>node, RBNode<T>parent){
+    	if(node!=null)
+    		node.parent=parent;
+    }
+    
+    private void preOrder(RBNode<T> tree){
+    	if(tree!=null){
+    		System.out.println(tree.key+" ");
+    		preOrder(tree.left);
+    		preOrder(tree.right);
+    	}
+    }
+    
+    public void preOrder(){
+    	preOrder(Root);
+    }
+    
+    private void inOrder(RBNode<T> tree){
+    	if(tree!=null){
+    		inOrder(tree.left);
+    		System.out.println(tree.key+" ");
+    		inOrder(tree.right);
+    	}
+    }
+    
+    public void inOrder(){
+    	inOrder(Root);
+    }
+    
+    private void postOrder(RBNode<T> tree){
+    	if(tree!=null){
+    		postOrder(tree.left);
+    		postOrder(tree.right);
+    		System.out.println(tree.key+" ");
+    	}
+    }
+    
+    public void postOrder(){
+    	postOrder(Root);
+    }
+    
+    
+    
+    
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+class RBNode<T extends Comparable <T>>{
+	public NodeColor color;
+	T key;
+	RBNode<T> left;
+	RBNode<T> right;
+	RBNode<T> parent;
+	
+	public RBNode(T key, NodeColor color, RBNode<T>parent, RBNode<T>left, RBNode<T>right){
+		this.key=key;
+		this.color=color;
+		this.parent=parent;
+		this.left=left;
+		this.right=right;
+	}
+	
+	public T getKey(){
+		return key;
+	}
+	
+	public String toString(){
+		return " "+key+this.color+" ";
+	}
+	
+}
+
+
+enum NodeColor{
+	red, black;
+}
